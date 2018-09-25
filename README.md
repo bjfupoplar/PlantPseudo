@@ -1,6 +1,4 @@
 ## PlantPseudo
-
-# Description:
 Pseudogenes are important resources in understanding the evolutionary history of genes and genomes.This pseudogene pipeline was used for pseudogene identification in plant species. 
 
 # Usage:
@@ -45,11 +43,15 @@ $ make install
 Put PlantPseudo.tar.gz in any directory:
 
 $ tar zxf PlantPseudo.tar.gz or unzip PlantPseudo.zip
-$ cd PlantPseudo/sample.data| unzip *.zip
-$ cd ../master
+
+$ cd  PlantPseudo/sample.data/
+
+$ unzip *.zip
+
+$ cd  PlantPseudo/bin/
 
 
-#Input data
+# Input data
 
 You may create a separate folder within the input_data (result_data) for each species. There need to be three files for each species genomic input data
 
@@ -57,7 +59,7 @@ You may create a separate folder within the input_data (result_data) for each sp
 - repeatMaskedFa:  contains a file named genome_rm.fa which is  entire repeat masked genome dna sequence from that species in FASTA format;
 - pep: contains a FASTA file for all the proteins in the species;
 - gff: The GFF (General Feature Format) format consists of one line per feature, each containing 9 columns of data, plus optional track definition lines. The following documentation is based on the Version 3 specifications.
---repeatMaskedGff: if provided, the pipeline will identifty helitron-associated pseudogenes. (The file is the output of RepeatMasker, which is a gff3 format )
+- repeatMaskedGff: if provided, the pipeline will identifty helitron-associated pseudogenes. (The file is the output of RepeatMasker, which is a gff3 format )
 
 # Run the pipeline:
 

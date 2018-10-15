@@ -1,0 +1,4 @@
+/home/pub/share_soft/fasta34
+/home/pub/share_soft/MCScanX
+/home/pub/share_soft/blast-2.2.25/bin
+/home/pub/share_soft/exonerate-2.2.0-x86_64/bin

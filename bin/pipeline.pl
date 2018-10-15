@@ -231,7 +231,7 @@ system("ln -s $file q");
 
 system("date");
 system("echo Pseudo_step1.py");
-system("python $scriptdir/Pseudo_step1 q $mlp");
+system("python $scriptdir/Pseudo_step1.py q $mlp");
 
 system("date");
 system("echo Pseudo_step2.py");
@@ -292,7 +292,7 @@ system("date");
 system("echo FinalPglst.py");
 system("python $scriptdir/FinalPglst.py wgdlist tandemlst Pg.add.xls final.pg.xls");
 
-system("rm -rf xyz* gene.pos gene.regions masked.region spe.gff tandemlst wgdlist q pseudogene.phase2  blast q_* overlap* temp* Pg.xls Pg.add.xls helitron.region pg.*");
+#system("rm -rf xyz* gene.pos gene.regions masked.region spe.gff tandemlst wgdlist q pseudogene.phase2  blast q_* overlap* temp* Pg.xls Pg.add.xls helitron.region pg.*");
 
 system("echo completed!!!");
 system("date");

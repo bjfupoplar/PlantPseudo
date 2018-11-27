@@ -1,12 +1,13 @@
+####get the sample data
+wget ftp://106.2.11.172/pub/paper/sample.data.tar.gz
+tar -zxvf sample.data.tar.gz
+
 
 ####get the data of the seven species
 
-#wget ftp://106.2.11.172/pub/paper/genome.tar.gz
-#tar -zxvf genome.tar.gz
+wget ftp://106.2.11.172/pub/paper/genome.tar.gz
+tar -zxvf genome.tar.gz
 
-####get the sample data
-#wget ftp://106.2.11.172/pub/paper/sample.data.tar.gz
-#tar -zxvf sample.data.tar.gz
 
 #generate pathfile
 ##############################

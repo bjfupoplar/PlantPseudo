@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #Author: jianbo xie
 
-#====version 1.2====
+#====version 3.0====
 #
 use strict;
 use warnings;
@@ -9,7 +9,7 @@ use Getopt::Long;
 use File::Basename;
 
 my %opts=qw();
-GetOptions(\%opts,"scriptDir:s","gff:s","pep:s","rawFa:s","repeatMaskedFa:s","eValueE:i","idenThresh:i","lenThresh:i","proThresh:f","qs:i","mLenPse:i","mLenIntron:i","dirFile:s","repeatMaskedGff:s","outDir:s","help|h!");
+GetOptions(\%opts,"scriptDir:s","gff:s","pep:s","rawFa:s","repeatMaskedFa:s","lncrna:s","eValueE:i","idenThresh:i","lenThresh:i","proThresh:f","qs:i","mLenPse:i","mLenIntron:i","dirFile:s","repeatMaskedGff:s","outDir:s","help|h!");
 
 my @usage=qq(
 ============================= Plant pseudogene analysis pipeline  ============================
@@ -19,22 +19,23 @@ my @usage=qq(
 Usage: PlantPseudo_v1.2 [Options]
 
 Options:
-	--scriptDir			Directory of the scripts
-	--gff				Input GFF file, example: pt.gff or pt.gff3, where pt is a short name for Ptrichocarpa
-	--pep				Input protein file
-	--rawFa				Raw whole genome sequence file in fasta format
+	--scriptDir				Directory of the scripts
+	--gff					Input GFF file, example: pt.gff or pt.gff3, where pt is a short name for Ptrichocarpa
+	--pep					Input protein file
+	--rawFa					Raw whole genome sequence file in fasta format
 	--repeatMaskedFa		Repeat masked genome sequence in fasta format
-	--eValueE			Evalue threshold in -log(e) [Default: -1].
+	--lncrna				A file in gff/gff3 format providing lncRNA position
+	--eValueE				Evalue threshold in -log(e) [Default: -1].
 	--idenThresh			Identity threshold in % [Default: 95].
-	--lenThresh			Length threshold [Default: 150].
-	--proThresh			Threshold for the proportion of match length vs sequence length [Default: 0.9].
-	--qs				For match length vs. sequence length comparison, use both query & subject [0], query only [1], or subject only [2].
-	--mLenPse			The max gap size for linking pseudoexons [Default: 50]
+	--lenThresh				Length threshold [Default: 150].
+	--proThresh				Threshold for the proportion of match length vs sequence length [Default: 0.9].
+	--qs					For match length vs. sequence length comparison, use both query & subject [0], query only [1], or subject only [2].
+	--mLenPse				The max gap size for linking pseudoexons [Default: 50]
 	--mLenIntron			The max size for intron length [Default: 50]
-	--dirFile			The path file contains the absolute paths of fasta34, MCScanX, blastall and exonerate sequentially
+	--dirFile				The path file contains the absolute paths of fasta34, MCScanX, blastall and exonerate sequentially
 	--repeatMaskedGff		Repeat masked gene file in gff format
-	--outDir			Result output directory
-	--h or help			Display this message
+	--outDir				Result output directory
+	--h or help				Display this message
 );
 
 
@@ -209,7 +210,7 @@ goto L if exists $opts{"repeatMaskedGff"};
 system("python $scriptdir/fa-mask.py --regions masked.region $rmfa > $spe.rep.gene.masked.fa");
 
 system("date");
-system("exonerate");
+#system("exonerate");
 system("$exoneratedir/exonerate --model protein2genome --showquerygff no --showtargetgff yes --maxintron 5000 --showvulgar yes --ryo \"%ti\\t%qi\\t%tS\\t%qS\\t%tl\\t%ql\\t%tab\\t%tae\\t%tal\\t%qab\\t%qae\\t%qal\\t%pi\\n\" $pep $spe.rep.gene.masked.fa > exonerate.out");
 
 system("date");
@@ -282,7 +283,7 @@ system("echo wgdlist pipeline");
 system("$blastadir/formatdb -i $pep -p T");
 system("$blastadir/blastall -i $pep -d $pep -p blastp -e 1e-10 -b 10 -v 10 -m 8 -o blast -a 18");
 system("python $scriptdir/Pggff.py Pg.xls");
-system("python $scriptdir/mcscanformatv2.py $pep  gene.pos spe.gff");
+system("python $scriptdir/mcscanformatv2.py $pep gene.pos spe.gff");
 system("cat spe.gff pg.gff > xyz.gff");
 system("cat blast pg.blast > xyz.blast");
 system("$mcscanxdir/MCScanX xyz"); #/home/pub/share_soft/MCScanX/MCScanX
@@ -292,11 +293,23 @@ system("date");
 system("echo FinalPglst.py");
 system("python $scriptdir/FinalPglst.py wgdlist tandemlst Pg.add.xls final.pg.xls");
 
-#system("rm -rf xyz* gene.pos gene.regions masked.region spe.gff tandemlst wgdlist q pseudogene.phase2  blast q_* overlap* temp* Pg.xls Pg.add.xls helitron.region pg.*");
+if (exists $opts{"lncrna"}) {
+	my $lrna = $opts{"lncrna"};
+	unless ($lrna =~ /\.gff3?$/) {
+		die "$lrna is an illegal file name, it should be in gff format!!!\n";
+	}
+	system("python $scriptdir/DistanceComparev5.1.py final.pg.xls gene.pos $lrna compare.xls");
+	system("python $scriptdir/Sumgenev1.py compare.xls Gene.Pseudo.distance.xls");
+	system("python $scriptdir/Sumpgv1.py compare.xls Pg.Pseudo.distance.xls");
+}
+
+system("rm -rf xyz* gene.pos gene.regions masked.region spe.gff tandemlst wgdlist q pseudogene.phase2  blast q_* overlap* temp* Pg.xls Pg.add.xls helitron.region pg.*");
 
 system("echo completed!!!");
 system("date");
 exit(0);
+
+
 L:
 ############################################### if repeatMaskedGff is provided ##########################################################
 
@@ -406,6 +419,16 @@ system("echo FinalPglsthelit");
 #############################################################################
 system("python $scriptdir/FinalPglsthelit.py wgdlist tandemlst helitron.pg.lst Pg.add.xls final.pg.xls");
 #system("python $scriptdir/PgClassification.py wgdlist pseudogene.phase3");
+
+if (exists $opts{"lncrna"}) {
+	my $lrna = $opts{"lncrna"};
+	unless ($lrna =~ /\.gff3?$/) {
+		die "$lrna is an illegal file name, it should be in gff format!!!\n";
+	}
+	system("python $scriptdir/DistanceComparev5.1.py final.pg.xls gene.pos $lrna compare.xls");
+	system("python $scriptdir/Sumgenev1.py compare.xls Gene.Pseudo.distance.xls");
+	system("python $scriptdir/Sumpgv1.py compare.xls Pg.Pseudo.distance.xls");
+}
 
 system("rm -rf xyz* gene.pos gene.regions masked.region spe.gff tandemlst wgdlist q pseudogene.phase2  blast q_* overlap* temp* Pg.xls Pg.add.xls helitron.region pg.*");
 

@@ -56,21 +56,25 @@ Put PlantPseudo.tar.gz in any directory:
 - pep: contains a FASTA file for all the proteins in the species;
 - gff: The GFF (General Feature Format) format consists of one line per feature, each containing 9 columns of data, plus optional track definition lines. The following documentation is based on the Version 3 specifications.
 - repeatMaskedGff: if provided, the pipeline will identifty helitron-associated pseudogenes. (The file is the output of RepeatMasker, which is a gff3 format )
-
+- lncrna: The lncrna position, if provided, the pipeline will identify the distance between pseudogenes/genes and lncRNAs.
 # Run the pipeline:
 
 First go to the folder PlantPseudo/bin, and run with  command line in the form of: 
-- perl  pseudopipe.pl  --scriptDir [script dir] --gff [gff file] --pep [input pep dir] --rawFa [rawFa dir] --repeatMaskedFa [repeatMaskedFa dir] --fasta34Dir [fasta34 dir] --MCSDir [MCScanX dir] --repeatMaskedGff (optional) --outDir [result dir]
+- perl  pipeline.pl  --scriptDir [script dir] --gff [gff file] --pep [input pep] --lnrna [lnrna file] --rawFa [rawFa] --repeatMaskedFa [repeatMaskedFa] --fasta34Dir [fasta34 dir] --MCSDir [MCScanX dir] --repeatMaskedGff (optional) --outDir [result dir]
 
 Examples using the sample.data is as follow:
 
-1. perl pipeline.pl --scriptDir ../script --gff ../sample.data/genome.gff3 --pep ../sample.data/sample.pep --rawFa ../sample.data/raw.fa --repeatMaskedFa ../sample.data/repmasked.fa --eValueE 5 --idenThresh 20 --lenThresh 30 --proThresh 0.05 --qs 1 --mLenPse 50 --mLenIntron 50 --dirfile pathfile.txt --repeatMaskedGff ../sample.data/Ptrichocarpa.chr.fa.out --outDir ../result
-2. perl pipeline.pl --scriptDir ../script --gff ../sample.data/genome.gff3 --pep ../sample.pep --rawFa ../sample.data/raw.fa --repeatMaskedFa ../sample.data/repmasked.fa --eValueE 5 --idenThresh 20 --lenThresh 30 --proThresh 0.05 --qs 1 --mLenPse 50 --mLenIntron 50 --dirfile pathfile.txt --outDir ../result
+1. perl pipeline.pl --scriptDir ../script --gff ../sample.data/genome.gff3 --pep ../sample.data/sample.pep --lncrna lncrna.gff --rawFa ../sample.data/raw.fa --repeatMaskedFa ../sample.data/repmasked.fa --eValueE 5 --idenThresh 20 --lenThresh 30 --proThresh 0.05 --qs 1 --mLenPse 50 --mLenIntron 50 --dirfile pathfile.txt --repeatMaskedGff ../sample.data/Ptrichocarpa.chr.fa.out --outDir ../result
+2. perl pipeline.pl --scriptDir ../script --gff ../sample.data/genome.gff3 --pep ../sample.pep --lncrna lncrna.gff --rawFa ../sample.data/raw.fa --repeatMaskedFa ../sample.data/repmasked.fa --eValueE 5 --idenThresh 20 --lenThresh 30 --proThresh 0.05 --qs 1 --mLenPse 50 --mLenIntron 50 --dirfile pathfile.txt --outDir ../result
 
 
 # Output:
 
-- result: the result pseudogene table 
+- result1: final.pg.xl (the result pseudogene table)
+- result2: Pg.Pseudo.distance.xls (The distance betwen pseudogene and lncRNAs)
+- result3: Gene.Pseudo.distance.xls (The distance betwen gene and lncRNAs)
+- result4: Gene.Classifcation.xls (The classfication of lncRNAs according to the postion which closer to genes)
+- result5: Pg.Classfication.xls (The classfication of lncRNAs according to the postion which closer to pseudogenes)
 
 The output can be found at result/final.pg.xls, given the above command line.
 
@@ -181,6 +185,11 @@ The output can be found at result/final.pg.xls, given the above command line.
 - output table: pgId    pgChr   pgStart pgEnd   pgStrand        pgpolyA expect  ident   stop1   stop2   fShift1 fShift2 numofIntrons intronPos       paln    pId     pChr    pStart  pEnd    pStrand Frac	DupType
 
 
+21. step21
+- script: DistanceComparev5.1.py
+- description: The distance between Genes/Pseudogenes and lncRNAs
+- output table: type    distance        lncRChr lncRstart       lncRend Chr     start   end 
+
 # Pipeline
 
 The pipeline consisted of five major steps: 
@@ -197,7 +206,6 @@ The pipeline consisted of five major steps:
 
 # The directory tree
 - &ensp;&ensp;&ensp;&ensp;--------|bin
-- &ensp;&ensp;&ensp;&ensp;--------|bin
 - &ensp;&ensp;&ensp;&ensp;--------|sample.data
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|genome.gff3
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|raw.fa
@@ -212,6 +220,7 @@ The pipeline consisted of five major steps:
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|CheckIntron.py
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|CheckStrand.py
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|DistributionGene.py
+- &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|DistanceComparev5.1.py
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|ExtractExonerateOut.py
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|fa-mask.py
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|FastaManager.py
@@ -238,6 +247,8 @@ The pipeline consisted of five major steps:
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|Repeat2Region.py
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|SingleLinkage.py
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|SumTablev2.py
+- &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|Sumpgv1.py
+- &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|Sumgenev1.py
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|Translation.py
 - &ensp;&ensp;&ensp;&ensp;-------|software
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|blast-2.2.25
@@ -245,4 +256,4 @@ The pipeline consisted of five major steps:
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|fasta34
 - &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;----------------|MCScanX
 - &ensp;&ensp;&ensp;&ensp;-------|README.md
-- &ensp;&ensp;&ensp;&ensp;-------|pathfile.txt
+- &ensp;&ensp;&ensp;&ensp;-------|workflow.sh

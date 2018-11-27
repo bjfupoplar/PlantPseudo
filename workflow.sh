@@ -1,12 +1,12 @@
 
 ####get the data of the seven species
 
-wget ftp://106.2.11.172/pub/paper/genome.tar.gz
-tar -zxvf genome.tar.gz
+#wget ftp://106.2.11.172/pub/paper/genome.tar.gz
+#tar -zxvf genome.tar.gz
 
 ####get the sample data
-wget ftp://106.2.11.172/pub/paper/sample.data.tar.gz
-tar -zxvf sample.data.tar.gz
+#wget ftp://106.2.11.172/pub/paper/sample.data.tar.gz
+#tar -zxvf sample.data.tar.gz
 
 #generate pathfile
 ##############################
@@ -28,8 +28,9 @@ new=${path}/${var4}
 echo "$new" >> pathfile.txt
 
 #export the  environment
-echo "export EXONERATE=\$EXONERATE:$new" >env.sh
-sh env.sh
+#echo "export EXONERATE=\$EXONERATE:$new" >script/env.sh
+echo "$new" >script/env.sh
+sh script/env.sh
 
 rm -rf ph
 #############################

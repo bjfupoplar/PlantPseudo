@@ -264,7 +264,7 @@ system("python $scriptdir/PolyACheck.py $rfa q_G$mlp.PE_I$mli.PS1.subj_coord.Str
 
 system("date");
 system("echo CheckIntron.py");
-system("python $scriptdir/CheckIntron.py q_G$mlp.PE_I$mli.PS1.pairs $pep q_G$mlp.PE_I$mli.PS1.subj_coord.fa");
+system("python $scriptdir/CheckIntron.py q_G$mlp.PE_I$mli.PS1.pairs $pep q_G$mlp.PE_I$mli.PS1.subj_coord.fa $scriptdir/env.sh");
 
 system("date");
 system("echo SumTablev2.py");

@@ -32,7 +32,8 @@ def batch_sw(pairs,fasta1,fasta2):
 
 		(intronum,pos)=(0,0)
 
-		program = "exonerate"
+		#program = "exonerate"
+		program = pathToex+"/exonerate"
 		flags   = "--model protein2genome --showvulgar no --showalignment no --maxintron 10000 --showquerygff no --showtargetgff yes --bestn 1 --ryo \"AveragePercentIdentity: %pi\\n\""
 
 		print "Program  :",program
@@ -107,6 +108,9 @@ def batch_sw(pairs,fasta1,fasta2):
 pairs=sys.argv[1] # pairs  ptr.q_G50.PE_I50.PS1.pairs
 fasta1=sys.argv[2] # fasta1 Ptrichocarpa_210_primary.pep
 fasta2=sys.argv[3] # fasta2 ptr.q_G50.PE_I50.PS1.subj_coord.fa
+file=open(sys.argv[4],'r')
+
+pathToex=file.readline().rstrip()
 
 batch_sw(pairs,fasta1,fasta2)
 

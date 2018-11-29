@@ -30,8 +30,8 @@ echo "$new" >> pathfile.txt
 new=${path}/${var4}
 echo "$new" >> pathfile.txt
 
-#export the  environment
-#echo "export EXONERATE=\$EXONERATE:$new" >script/env.sh
+export the  environment
+echo "export EXONERATE=\$EXONERATE:$new" >script/env.sh
 echo "$new" >script/env.sh
 sh script/env.sh
 

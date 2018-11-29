@@ -79,7 +79,7 @@ for eachline in IN3:
 	try:
 		(e1,e2,e3,e4,e5,e6)=dis(dpg,dg,chr,start,end)
 	except:
-		print "No matched chromosome"
+		pass
 	else:
 		OUT.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\n"%(e1,e2,e3,e4,e5,lncrna,"\t".join(e6)))
 

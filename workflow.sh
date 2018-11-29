@@ -1,4 +1,4 @@
-cd PlantPseudo
+cd /root/PlantPseudo
 
 ####get the sample data
 wget ftp://106.2.11.172/pub/paper/sample.data.tar.gz

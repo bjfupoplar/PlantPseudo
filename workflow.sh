@@ -1,3 +1,5 @@
+cd PlantPseudo
+
 ####get the sample data
 wget ftp://106.2.11.172/pub/paper/sample.data.tar.gz
 tar -zxvf sample.data.tar.gz

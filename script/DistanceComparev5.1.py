@@ -20,13 +20,10 @@ def dis(dpg,dg,chr,start,end):
 		if pos[0]==chr:
 			d2.append(abs(int(start)-int(pos[1]))) #the distance between gene tss and lncRNA tss
 			c2.append(pos)
-	try:
-		if min(d1)<min(d2): #smaller  distance were selected
+	if min(d1)<min(d2): #smaller  distance were selected
 			return "pgdist",min(d1),chr,start,end,c1[d1.index(min(d1))]
-		else:
+	else:
 			return "genedist",min(d2),chr,start,end,c2[d2.index(min(d2))]	
-	except:
-		print "pass"
 				
 IN1=open(sys.argv[1],'r')#pg
 IN2=open(sys.argv[2],'r')#gene
@@ -79,8 +76,12 @@ for eachline in IN3:
 		end=split[1]
 	chr=split[0]
 	lncrna=split[3]
-	(e1,e2,e3,e4,e5,e6)=dis(dpg,dg,chr,start,end)
-	OUT.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\n"%(e1,e2,e3,e4,e5,lncrna,"\t".join(e6)))
+	try:
+		(e1,e2,e3,e4,e5,e6)=dis(dpg,dg,chr,start,end)
+	except:
+		print "No matched chromosome"
+	else:
+		OUT.write("%s\t%s\t%s\t%s\t%s\t%s\t%s\n"%(e1,e2,e3,e4,e5,lncrna,"\t".join(e6)))
 
 IN1.close()
 IN2.close()

@@ -85,4 +85,4 @@ cd ../bin
 
 #7.Sbicolor/
 
-perl pipeline.pl --scriptDir ../../script --gff sb.genome.gff3 --pep sb.pep --rawFa sb.raw.fa  repeatMaskedFa sb.repmasked.fa  --eValueE 5 --idenThresh 20 --lenThresh 30 --proThresh 0.05 --qs 1 --mLenPse 50 --mLenIntron 50 --dirfile ../pathfile.txt  --outDir ../data/7.Sbicolor
+perl pipeline.pl --scriptDir ../../script --gff sb.genome.gff3 --pep sb.pep --rawFa sb.raw.fa  --repeatMaskedFa sb.repmasked.fa  --eValueE 5 --idenThresh 20 --lenThresh 30 --proThresh 0.05 --qs 1 --mLenPse 50 --mLenIntron 50 --dirfile ../pathfile.txt  --outDir ../data/7.Sbicolor
